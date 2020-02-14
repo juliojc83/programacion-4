@@ -4,13 +4,12 @@ body{
     margin: 10px;
 }
 body > h1{
-    background-color: brown;
+    background-color: green;
     margin: 10px;
 }
-
 input{
     height: 24px;
-    border: 1px solid rgb(136, 169, 231);
+    border: 1px solid rgb(129, 131, 134);
     border-radius: 5px;
 }
 input[type=submit],
@@ -25,26 +24,22 @@ input[type=file]{
 input[type=submit]:hover,
 input[type=button]:hover,
 input[type=file]:hover{
-    color: rgb(56, 99, 218);
+    color:  rgb(56, 99, 218);
     background-color: #FFF;
 }
 input[type=text]:invalid,
-input[type=text]:invalid,
 input[type=date]:invalid,
-input[type=number]:invalid,
-input[type=number]:invalid,
-input[type=email]:invalid,
-input[type=fail]:invalid{
+input[type=file]:invalid,
+input[type=url]:invalid,
+input[type=tel]:invalid{
     background-color: rgb(250, 156, 156);
     color: black;
 }
-input[type=text]:valid,
-input[type=text]:valid,
-input[type=date]:valid,
-input[type=number]:valid,
-input[type=number]:valid,
-input[type=email]:valid,
-input[type=fail]:valid{
+input[type=text]:valid, 
+input[type=date]:valid, 
+input[type=file]:valid,
+input[type=url]:valid,
+input[type=tel]:valid{
     background-color: rgb(134, 250, 173);
     color: black;
 }
