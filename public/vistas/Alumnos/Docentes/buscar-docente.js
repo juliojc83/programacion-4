@@ -1,48 +1,53 @@
-export function modulo(){
-    var $ = el => document.querySelector(el),
-        frmBuscarDocentes = $("#txtBuscarDocentes");
-    frmBuscarDocentes.addEventListener('keyup', e=>{
-        traerDatos(frmBuscarDocentes.value);
-    });
-    let modificarAlumno = (docente)=>{
-        $("#frm-docentes").dataset.accion = 'modificar';
-        $("#frm-docentes").dataset.iddocente = docente.idDocente;
-        $("#txtCodigoDocente").value = docente.codigo;
-        $("#txtNombreDocente").value = docente.nombre;
-        $("#txtDireccionDocente").value = docente.direccion;
-        $("#txtTelefonoDocente").value = docente.telefono;
-    };
-    let eliminarDocente = (idDocente)=>{
-        fetch(`private/Modulos/docentes/procesos.php?proceso=eliminarDocente&docente=${idDocente}`).then(resp=>resp.json()).then(resp=>{
-            traerDatos('');
-        });
-    };
-    let traerDatos = (valor)=>{
-        fetch(`private/Modulos/docentes/procesos.php?proceso=buscarDocentes&docente=${valor}`).then(resp=>resp.json()).then(resp=>{
-            let filas = '';
-            resp.forEach(docente => {
-                filas += `
-                    <tr data-iddocente='${docente.idDocente}' data-docente='${JSON.stringify(docente)}'>
-                        <td>${docente.codigo}</td>
-                        <td>${docente.nombre}</td>
-                        <td>${docente.dui}</td>
-                        <td>${docente.direccion}</td>
-                        <td>${docente.telefono}</td>
-                        <td>
-                            <input type="button" class="btn btn-outline-danger text-white" value="del">
-                        </td>
-                    </tr>
-                `;
+
+ var appBuscarDocentes = new Vue({
+
+    el: "#frm-buscar-docentes",
+
+    data: {
+
+        data_docentes:[],
+        valor   :''
+
+    },
+    methods: {
+
+        buscarDocentes: function () {
+            fetch(`private/Modulos/Docentes/procesos.php?proceso=buscarDocente&docente=${this.valor}`).then( resp => resp.json() ).then( resp => {
+                this.data_docentes = resp;
             });
-            $("#tbl-buscar-docentes > tbody").innerHTML = filas;
-            $("#tbl-buscar-docentes > tbody").addEventListener("click",e=>{
-                if( e.srcElement.parentNode.dataset.docente==null ){
-                    eliminarDocente( e.srcElement.parentNode.parentNode.dataset.iddocente );
-                } else {
-                    modificarDocente( JSON.parse(e.srcElement.parentNode.dataset.docente) );
-                }
+        },
+        modificarDocente: function (docentes) {
+            this.cerrarBuscarDocentes();
+            appDocente.docentes = docentes;
+            console.log(JSON.stringify(docentes));
+            
+            appDocente.docentes.accion = 'modificar';
+        },
+        verificacionEliminacion: function (idDocente) {
+            alertify.confirm('Alerta', 'Esta seguro de eliminar este registro',function(){
+                appBuscarDocentes.eliminarDocente(idDocente);
+                alertify.success('Registro Eliminado');
+                
+            }, function() {
+                alertify.error('Cancelado');
+                
             });
-        });
-    };
-    traerDatos('');
-}
+            
+        },
+        eliminarDocente(id){
+            console.log(id);
+            
+            fetch(`private/Modulos/Docentes/procesos.php?proceso=eliminarDocente&docente=${id}`).then(resp=>resp.json()).then(resp=>{
+                appBuscarDocentes.buscarDocentes();
+            });
+        },
+        cerrarBuscarDocentes:function(){
+            $(`#modulo-vista-docentes`).hide( "puff", "slow" );
+        }
+
+    },
+    created:function () {
+        this.buscarDocentes();
+    }
+
+})
