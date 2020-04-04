@@ -18,5 +18,8 @@ class Conexion{
     public function respuesta(){
         return $this->result;
     }
+    public function id(){
+        return $this->result->id()
+    }
 }
 ?>
